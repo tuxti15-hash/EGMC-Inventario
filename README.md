@@ -22,6 +22,7 @@ Abre `index.html` en un navegador actualizado. En la primera apertura se muestra
 - `index.html`: contenido y formularios.
 - `styles.css`: diseño de escritorio y móvil.
 - `app.js`: inventario, filtros, movimientos y descarga CSV.
+- `inventario.csv`: artículos de demostración en formato CSV.
 - HTML, CSS y JavaScript sin librerías externas.
 
 Los cambios se guardan en `localStorage` del navegador. Por eso, el prototipo funciona en un solo equipo y no sincroniza información entre usuarios.
