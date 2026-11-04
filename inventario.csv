@@ -1,0 +1,9 @@
+Artículo,Código,Categoría,Obra / almacén,Unidad,Existencias,Mínimo,Precio unitario (MXN),Valor total (MXN)
+Cemento gris,MAT-00124,Materiales,Obra Reforma,saco,48,20,245.00,11760.00
+Varilla corrugada 3/8”,MAT-00118,Materiales,Almacén central,tramo,12,25,168.00,2016.00
+Casco de seguridad,SEG-00047,Equipo de seguridad,Obra Las Palmas,pieza,32,10,185.00,5920.00
+Taladro percutor,HER-00036,Herramientas,Almacén central,pieza,8,3,2890.00,23120.00
+Cable THW calibre 12,MAT-00092,Instalaciones,Obra Reforma,metro,5,15,24.50,122.50
+Guantes de carnaza,SEG-00031,Equipo de seguridad,Almacén central,par,64,20,42.00,2688.00
+Disco de corte 4½”,HER-00029,Herramientas,Obra Las Palmas,pieza,18,12,38.00,684.00
+
