@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#293b35">
+  <title>EGMC Inventario — Control de obra</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="#inventario">
+      <span class="brand-icon">EG</span>
+      <span>EGMC <span class="brand-light">Inventario</span><small>SISTEMA DE CONTROL DE OBRA</small></span>
+    </a>
+
+    <div class="side-label">EMPRESA</div>
+    <div class="workspace">
+      <span class="workspace-icon">E</span>
+      <span><b>EGMC Constructora</b><small>Control de materiales</small></span>
+    </div>
+
+    <div class="side-label menu-label">SECCIONES</div>
+    <nav aria-label="Secciones del sistema">
+      <a class="nav-link active" href="#inventario"><span>▦</span> Inventario</a>
+      <a class="nav-link" href="#movements"><span>↕</span> Movimientos <i id="movementNavCount">0</i></a>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="help-card">
+        <span class="help-dot">i</span>
+        <b>Proyecto de demostración</b>
+        <p>Los datos iniciales son de ejemplo. Los cambios se guardan en este navegador.</p>
+      </div>
+      <div class="profile">
+        <div class="avatar">EG</div>
+        <div><b>Área de almacén</b><small>Usuario local</small></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="crumb"><b>EGMC</b><span>/</span>Inventario de obra</div>
+      <div class="top-actions"><span class="today" id="today"></span></div>
+    </header>
+
+    <section class="content" id="inventario">
+      <div class="heading-row">
+        <div>
+          <div class="eyebrow"><span class="live-dot"></span>REGISTRO DE ALMACÉN</div>
+          <h1>Inventario de materiales</h1>
+          <p class="subtitle">Existencias registradas por obra y almacén.</p>
+        </div>
+        <div class="heading-actions">
+          <button class="button button-secondary" id="exportBtn"><span>↓</span>Descargar CSV</button>
+          <button class="button button-primary" id="addBtn"><span>＋</span>Nuevo artículo</button>
+        </div>
+      </div>
+
+      <div class="sample-notice">
+        <span>!</span>
+        <div><b>Datos de muestra</b><p>El inventario inicial sirve para mostrar el funcionamiento. Puedes editarlo o reemplazarlo con tus datos.</p></div>
+      </div>
+
+      <div class="stats-grid">
+        <article class="stat-card">
+          <div class="stat-top"><span>Artículos registrados</span><span class="stat-icon green">▦</span></div>
+          <div class="stat-value" id="totalItems">0</div>
+          <div class="stat-note"><b class="positive">Inventario</b> en todas tus obras</div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-top"><span>Valor del inventario</span><span class="stat-icon sand">$</span></div>
+          <div class="stat-value" id="totalValue">$0</div>
+          <div class="stat-note">Cálculo según el precio unitario</div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-top"><span>Por agotarse</span><span class="stat-icon amber">!</span></div>
+          <div class="stat-value" id="lowItems">0</div>
+          <div class="stat-note"><span class="warning-mark">●</span>En o debajo del mínimo</div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-top"><span>Obras con inventario</span><span class="stat-icon blue">⌖</span></div>
+          <div class="stat-value" id="activeWorks">0</div>
+          <div class="stat-note">Según la ubicación registrada</div>
+        </article>
+      </div>
+
+      <section class="inventory-panel" aria-labelledby="itemsTitle">
+        <div class="panel-heading">
+          <div><h2 id="itemsTitle">Artículos registrados</h2><p>Revisa cantidades, ubicación y nivel de existencias.</p></div>
+          <select class="filter-button" id="categoryFilter" aria-label="Filtrar por categoría">
+            <option>Todas las categorías</option>
+          </select>
+        </div>
+        <div class="toolbar">
+          <div class="tabs" aria-label="Filtrar por nivel de existencias">
+            <button class="tab selected" data-status="all">Todos <span id="allCount">0</span></button>
+            <button class="tab" data-status="low">Stock bajo <span id="lowCount">0</span></button>
+            <button class="tab" data-status="ok">En existencia</button>
+          </div>
+          <label class="search"><span>⌕</span><input id="searchInput" type="search" placeholder="Buscar artículo..."><kbd>Ctrl K</kbd></label>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>ARTÍCULO</th><th>CATEGORÍA</th><th>OBRA / ALMACÉN</th><th>EXISTENCIA / MÍNIMO</th><th>ESTADO</th><th>PRECIO UNITARIO</th><th></th></tr></thead>
+            <tbody id="inventoryBody"></tbody>
+          </table>
+          <div class="empty-state" id="emptyState" hidden>
+            <div>▦</div><b>No hay artículos que coincidan</b><p>Cambia la búsqueda o registra un artículo.</p>
+          </div>
+        </div>
+        <div class="table-footer"><span id="tableSummary">Mostrando 0 artículos</span></div>
+      </section>
+
+      <section class="inventory-panel movements-panel" id="movements" aria-labelledby="movementsTitle">
+        <div class="panel-heading">
+          <div><h2 id="movementsTitle">Movimientos recientes</h2><p>Entradas y salidas registradas en este navegador.</p></div>
+          <button class="button button-secondary" id="movementAddBtn">＋ Registrar movimiento</button>
+        </div>
+        <div id="movementList"></div>
+      </section>
+
+      <footer>EGMC Inventario <span>·</span>Proyecto académico de demostración <span>·</span><span id="year"></span></footer>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="itemModal" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head">
+        <div><span class="eyebrow">REGISTRO DE ALMACÉN</span><h2 id="modalTitle">Agregar artículo</h2></div>
+        <button class="close-button" data-close aria-label="Cerrar">×</button>
+      </div>
+      <form id="itemForm">
+        <input type="hidden" id="itemId">
+        <label>Nombre del artículo<input id="itemName" required placeholder="Ej. Cemento gris"></label>
+        <div class="form-grid">
+          <label>Categoría<select id="itemCategory"><option>Materiales</option><option>Herramientas</option><option>Equipo de seguridad</option><option>Maquinaria</option><option>Instalaciones</option></select></label>
+          <label>Obra / almacén<input id="itemLocation" required placeholder="Ej. Obra Reforma"></label>
+        </div>
+        <div class="form-grid">
+          <label>Unidad de medida<select id="itemUnit"><option>pieza</option><option>saco</option><option>metro</option><option>kilogramo</option><option>litro</option><option>caja</option><option>par</option><option>rollo</option><option>tramo</option></select></label>
+          <label>Precio unitario (MXN)<input id="itemPrice" type="number" min="0" step="0.01" required placeholder="0.00"></label>
+        </div>
+        <div class="form-grid">
+          <label>Existencias<input id="itemQty" type="number" min="0" step="1" required placeholder="0"></label>
+          <label>Mínimo de existencias<input id="itemMin" type="number" min="0" step="1" required placeholder="5"></label>
+        </div>
+        <div class="modal-actions">
+          <button class="button button-secondary" type="button" data-close>Cancelar</button>
+          <button class="button button-primary" type="submit">Guardar artículo</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="movementModal" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="movementTitle">
+      <div class="modal-head">
+        <div><span class="eyebrow">REGISTRO DE ALMACÉN</span><h2 id="movementTitle">Registrar movimiento</h2></div>
+        <button class="close-button" data-close aria-label="Cerrar">×</button>
+      </div>
+      <form id="movementForm">
+        <label>Artículo<select id="movementItem" required></select></label>
+        <div class="form-grid">
+          <label>Tipo<select id="movementType"><option value="in">Entrada</option><option value="out">Salida</option></select></label>
+          <label>Cantidad<input id="movementQty" type="number" min="1" step="1" required placeholder="0"></label>
+        </div>
+        <label>Observaciones (opcional)<input id="movementNote" placeholder="Ej. Entrega del proveedor"></label>
+        <div class="modal-actions">
+          <button class="button button-secondary" type="button" data-close>Cancelar</button>
+          <button class="button button-primary" type="submit">Guardar movimiento</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>
+
